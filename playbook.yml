@@ -1,0 +1,15 @@
+---
+- hosts: winvm
+  gather_facts: no
+  strategy: free
+  tasks:
+  - name: Copy Inventory
+    win_copy:
+      src: inventory.yml
+      dest: c:\Build\
+  - name: Mount Share
+    raw: '$password = "interOP@123" | ConvertTo-SecureString -asPlainText -Force;$username="~\erwinuser";$credential=New-Object System.Management.Automation.PSCredential($username,$password);new-psdrive -name "M" -Root "\\erwinautobuild\erwin r9.9 Cougar Builds" -PSProvider "FileSystem" -Credential $credential;ls M:'
+  - name: Test Share
+    raw: 'ls M:'
+#  - name: Copy EXE
+#    raw: 'Copy-Item -Path "M:\VS_2017\X64 Bit Builds\erwin X64 Builds\23-08-2019\erwin Data Modeler 2019 R2 (64-bit)_11331.exe" -Destination "C:\Build\" -recurse -force'
